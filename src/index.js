@@ -2,11 +2,10 @@ import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
-  getDocs,
   addDoc,
   doc,
   deleteDoc,
-  updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -27,16 +26,15 @@ const db = getFirestore();
 //collection ref
 const colRef = collection(db, "books");
 
-//get collection data
-getDocs(colRef)
-  .then((snapshot) => {
-    let books = [];
-    snapshot.docs.forEach((book) => {
-      books.push({ ...book.data(), id: book.id });
-    });
-    console.log(books);
-  })
-  .catch((err) => console.error("Ada error"));
+//real time get collection data
+
+onSnapshot(colRef, (snapshot) => {
+  let books = [];
+  snapshot.docs.forEach((book) => {
+    books.push({ ...book.data(), id: book.id });
+  });
+  console.log(books);
+});
 
 //adding documents
 const addBookForm = document.querySelector(".add");
