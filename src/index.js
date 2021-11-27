@@ -7,8 +7,8 @@ import {
   deleteDoc,
   onSnapshot,
   query,
-  where,
   orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -30,11 +30,7 @@ const db = getFirestore();
 const colRef = collection(db, "books");
 
 //real time get collection data
-const q = query(
-  colRef,
-  where("author", "==", "brandon sanderson"),
-  orderBy("title", "desc")
-);
+const q = query(colRef, orderBy("createdAt", "asc"));
 onSnapshot(q, (snapshot) => {
   let books = [];
   snapshot.docs.forEach((book) => {
@@ -50,6 +46,7 @@ addBookForm.addEventListener("submit", (e) => {
   addDoc(colRef, {
     title: addBookForm.title.value,
     author: addBookForm.author.value,
+    createdAt: serverTimestamp(),
   }).then(() => {
     addBookForm.reset();
   });
