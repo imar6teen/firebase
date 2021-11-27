@@ -8,6 +8,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -29,7 +30,11 @@ const db = getFirestore();
 const colRef = collection(db, "books");
 
 //real time get collection data
-const q = query(colRef, where("author", "==", "brandon sanderson"));
+const q = query(
+  colRef,
+  where("author", "==", "brandon sanderson"),
+  orderBy("title", "desc")
+);
 onSnapshot(q, (snapshot) => {
   let books = [];
   snapshot.docs.forEach((book) => {
