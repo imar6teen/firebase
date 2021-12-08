@@ -40,7 +40,7 @@ const colRef = collection(db, "books");
 
 //real time get collection data
 const q = query(colRef, orderBy("createdAt", "asc"));
-onSnapshot(q, (snapshot) => {
+const unsub = onSnapshot(q, (snapshot) => {
   let books = [];
   snapshot.docs.forEach((book) => {
     books.push({ ...book.data(), id: book.id });
@@ -127,6 +127,15 @@ logoutButton.addEventListener("click", (e) => {
 });
 
 //subscribing to auth changes
-onAuthStateChanged(auth, (user) => {
+const unsubAuth = onAuthStateChanged(auth, (user) => {
   console.log("user status changed", user);
+});
+
+//unsubscribing from changes (auth & db)
+//unsubscribe berguna untuk menghilangkan realtime
+const unsubButton = document.querySelector(".unsub");
+unsubButton.addEventListener("click", () => {
+  console.log("unsunscribing");
+  unsub();
+  unsubAuth();
 });
