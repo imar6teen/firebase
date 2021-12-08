@@ -16,6 +16,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -79,6 +80,7 @@ getDoc(docRef)
   })
   .catch((err) => console.error(err));
 
+//sign up
 const signUpForm = document.querySelector(".signup");
 signUpForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -97,6 +99,7 @@ signUpForm.addEventListener("submit", (e) => {
     });
 });
 
+//login logout
 const loginForm = document.querySelector(".login");
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -121,4 +124,9 @@ logoutButton.addEventListener("click", (e) => {
     .catch((err) => {
       console.error(err.message);
     });
+});
+
+//subscribing to auth changes
+onAuthStateChanged(auth, (user) => {
+  console.log("user status changed", user);
 });
